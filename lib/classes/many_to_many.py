@@ -8,34 +8,40 @@ class Article:
         self._title = str(title)
         Article.all.append(self)
 
-    @property
-    def title(self):
+# without decorators
+    def get_title(self):
         return self._title
-    
-    @title.setter
-    def title(self, title):
-        return self.title
-    
+
+    def set_title(self, title):
+         if isinstance(title,str):
+             return ;self._title = title
+         else:
+            "Title musy be a string"
+
+
+    title = property(get_title, set_title)
+        
+       
     
         
 class Author:
     def __init__(self, name):
         self._name = name
-    
+# with decorator
     @property
     def name(self):
         return self._name
     
     @name.setter
     def name(self, name):
-        return self.name
+        return self._name
 
     def articles(self):
-        # if isinstance(articles, Article):
-        return [article for article in Article.all if article.author == self]
+        
+            return [article for article in Article.all if article.author == self]
 
     def magazines(self):
-        # if isinstance(article, Article):
+       
         return list(set([article.magazine for article in self.articles()]))
 
     def add_article(self, magazine, title):
@@ -86,10 +92,10 @@ class Magazine:
 
 
     def contributors(self):
-        
-        return list(set([article.author for article in self.articles()]))
-    
-
+        unique_authors = set()
+        for article in self.articles():
+         unique_authors.add(article.author)
+        return list(unique_authors)
     
     def contributing_authors(self):
         authors_count = {}
